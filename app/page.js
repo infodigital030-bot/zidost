@@ -36,7 +36,7 @@ function Nav() {
     >
       <div className="max-w-6xl mx-auto px-8 lg:px-16 h-20 flex items-center justify-between">
         <a href="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="ZidOst Logo" className="h-10 w-auto" />
+          <img src="/logo.png" alt="ZidOst Logo" className="h-10 w-auto" style={{ filter: "brightness(0) invert(1)" }} />
         </a>
 
         {/* Desktop */}
