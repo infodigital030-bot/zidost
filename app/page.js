@@ -83,6 +83,14 @@ function Nav() {
   );
 }
 
+/* ─── Hero Slider images ──────────────────────────────────────────────────── */
+const HERO_SLIDES = [
+  { src: "/hero-1.jpg", alt: "Renoviertes Wohnzimmer mit Holzboden – ZidOst Berlin" },
+  { src: "/hero-2.jpg", alt: "Modernes Wohnzimmer nach Renovierung – ZidOst Berlin" },
+  { src: "/hero-3.jpg", alt: "Helle Altbau-Wohnung nach Sanierung – ZidOst Berlin" },
+  { src: "/hero-4.jpg", alt: "Modernisierte Wohnung mit Marmorböden – ZidOst Berlin" },
+];
+
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
 const CORE = [
   {
@@ -106,24 +114,71 @@ const CORE = [
 ];
 
 function Hero() {
+  const [current, setCurrent] = useState(0);
+  const [prev, setPrev] = useState(null);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPrev(current);
+      setFading(true);
+      setCurrent(c => (c + 1) % HERO_SLIDES.length);
+      setTimeout(() => { setPrev(null); setFading(false); }, 1200);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [current]);
+
   return (
     <section className="relative min-h-screen flex flex-col">
-      {/* Background */}
-      <div className="absolute inset-0">
+      {/* Background slider */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Previous slide fading out */}
+        {prev !== null && (
+          <img
+            key={`prev-${prev}`}
+            src={HERO_SLIDES[prev].src}
+            alt={HERO_SLIDES[prev].alt}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ opacity: fading ? 0 : 1, transition: "opacity 1.2s ease-in-out", zIndex: 1 }}
+          />
+        )}
+        {/* Current slide */}
         <img
-          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80"
-          alt="Renovierung und Sanierung Berlin"
-          className="w-full h-full object-cover"
+          key={`cur-${current}`}
+          src={HERO_SLIDES[current].src}
+          alt={HERO_SLIDES[current].alt}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 1, zIndex: 2 }}
         />
-        <div className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, rgba(13,36,97,0.93) 0%, rgba(27,53,133,0.82) 50%, rgba(13,36,97,0.75) 100%)" }} />
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 z-10"
+          style={{ background: "linear-gradient(135deg, rgba(13,36,97,0.90) 0%, rgba(27,53,133,0.78) 50%, rgba(13,36,97,0.72) 100%)" }} />
         {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-5"
+        <div className="absolute inset-0 z-10 opacity-5"
           style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
       </div>
 
+      {/* Slide indicator dots */}
+      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {HERO_SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => { setPrev(current); setFading(true); setCurrent(i); setTimeout(() => { setPrev(null); setFading(false); }, 1200); }}
+            className="transition-all duration-300"
+            style={{
+              width: i === current ? "28px" : "8px",
+              height: "8px",
+              borderRadius: "4px",
+              background: i === current ? "#C8A45A" : "rgba(255,255,255,0.4)",
+              border: "none",
+              cursor: "pointer",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center pt-32 pb-12 px-8 lg:px-16">
+      <div className="relative z-20 flex-1 flex flex-col justify-center pt-32 pb-12 px-8 lg:px-16">
         <div className="max-w-6xl mx-auto w-full">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-8 backdrop-blur-sm tracking-widest uppercase">
@@ -156,7 +211,7 @@ function Hero() {
       </div>
 
       {/* Core service cards — overlapping bottom */}
-      <div className="relative z-10 px-8 lg:px-16 pb-0">
+      <div className="relative z-20 px-8 lg:px-16 pb-0">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {CORE.map((item, i) => (
