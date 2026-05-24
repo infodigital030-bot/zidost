@@ -142,13 +142,18 @@ function Hero() {
             style={{ opacity: fading ? 0 : 1, transition: "opacity 1.2s ease-in-out", zIndex: 1 }}
           />
         )}
-        {/* Current slide */}
+        {/* Current slide with Ken Burns zoom */}
         <img
           key={`cur-${current}`}
           src={HERO_SLIDES[current].src}
           alt={HERO_SLIDES[current].alt}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1, zIndex: 2 }}
+          style={{
+            opacity: 1,
+            zIndex: 2,
+            animation: "kenburns 6s ease-out forwards",
+            transformOrigin: "center center",
+          }}
         />
         {/* Dark gradient overlay */}
         <div className="absolute inset-0 z-10"
