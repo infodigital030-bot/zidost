@@ -89,7 +89,7 @@ const CORE = [
     icon: Wrench,
     title: "Renovierung",
     desc: "Komplette Wohnungs- und Hausrenovierungen – termingerecht und im Budget.",
-    href: "#leistungen",
+    href: "/leistungen/renovierung",
   },
   {
     icon: Building2,
@@ -101,7 +101,7 @@ const CORE = [
     icon: Home,
     title: "Modernisierung",
     desc: "Energetische und gestalterische Modernisierung nach aktuellen Standards.",
-    href: "#leistungen",
+    href: "/leistungen/modernisierung",
   },
 ];
 
